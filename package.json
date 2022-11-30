@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon -e js,ejs",
     "start:prod": "node index.js",
+    "pretest": "NODE_ENV=test npx sequelize-cli db:drop",
     "test": "jest"
   },
   "lint-staged": {
