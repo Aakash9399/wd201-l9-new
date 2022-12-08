@@ -56,24 +56,17 @@ app.get("/todos/:id", async function (request, response) {
   }
 });
 
-app.post("/todos", async (request, response) => {
-  console.log("creating new todo", request.body);
-  if(request.body.dueDate.length==0){
-    return response.redirect("/todos");
-  }
+app.post("/todos", async function (request, response) {
+  console.log("Creating new Todo: ", request.body);
   try {
-    // eslint-disable-next-line no-unused-vars
-    await Todo.addTodo({
-      title: request.body.title,
-      dueDate: request.body.dueDate,
-      commpleted: false,
-    });
-    return response.redirect("/");
+    await Todo.addTodo(request.body);
+    return response.redirect("/"); // response.json(todo);
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
   }
 });
+
 
 app.put("/todos/:id", async (request, response) => {
   console.log("Mark Todo as completed:", request.params.id);
