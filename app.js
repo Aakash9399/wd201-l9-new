@@ -56,20 +56,31 @@ app.get("/todos/:id", async function (request, response) {
   }
 });
 
-app.post("/todos", async (request, response) => {
-  console.log("creating a todo", request.body);
-  try {
-    const todo = await Todo.addTodo({
-      title: request.body.title,
-      dueDate: request.body.dueDate,
-      completed: false,
-    });
-    return response.redirect("/");
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
+app.post( 
+  "/todos", 
+  connectEnsureLogin.ensureLoggedIn(), 
+  async function (request, response) { 
+    if (request.body.title == "") { 
+      request.flash("error", "Todo must have a title"); 
+      return response.redirect("/todos"); 
+    } 
+    if (request.body.dueDate == "") { 
+      request.flash("error", "Please provide a due date"); 
+      return response.redirect("/todos"); 
+    } 
+    try { 
+      await Todo.addTodo({ 
+        title: request.body.title, 
+        dueDate: request.body.dueDate, 
+        userId: request.user.id, 
+      }); 
+      return response.redirect("/todos"); 
+    } catch (error) { 
+      console.log(error); 
+      return response.status(422).json(error); 
+    } 
+  } 
+); 
 
 app.put("/todos/:id", async (request, response) => {
   console.log("Mark Todo as completed:", request.params.id);
