@@ -59,6 +59,7 @@ app.get("/todos/:id", async function (request, response) {
 app.post("/todos", async (request, response) => {
   console.log("creating new todo", request.body);
   if(request.body.dueDate.length==0){
+    request.flash("error","Due date cannot be empty!");
     return response.redirect("/todos");
   }
   try {
