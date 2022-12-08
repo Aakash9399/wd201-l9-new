@@ -57,11 +57,9 @@ app.get("/todos/:id", async function (request, response) {
 });
 
 app.post("/todos", async (request, response) => {
-  console.log("creating new todo", request.body);
-  
+  console.log("creating a todo", request.body);
   try {
-    // eslint-disable-next-line no-unused-vars
-    await Todo.addTodo({
+    const todo = await Todo.addTodo({
       title: request.body.title,
       dueDate: request.body.dueDate,
       completed: false,
@@ -69,7 +67,7 @@ app.post("/todos", async (request, response) => {
     return response.redirect("/");
   } catch (error) {
     console.log(error);
-    return response.redirect("/todos");
+    return response.status(422).json(error);
   }
 });
 
