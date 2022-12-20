@@ -243,7 +243,7 @@ app.post(
       await Todo.addTodo({
         title: request.body.title,
         dueDate: request.body.dueDate,
-        userID: request.user.id,
+        userId: request.user.id,
       });
       return response.redirect("/todos");
     } catch (error) {
